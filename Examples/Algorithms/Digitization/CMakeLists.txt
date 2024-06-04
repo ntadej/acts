@@ -2,6 +2,7 @@ add_library(
   ActsExamplesDigitization SHARED
   src/DigitizationAlgorithm.cpp
   src/DigitizationConfig.cpp
+  src/DigitizationCoordinatesConverter.cpp
   src/MeasurementCreation.cpp
   src/DigitizationConfigurator.cpp
   src/ModuleClusters.cpp)
