@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# This file is part of the ACTS project.
+#
+# Copyright (C) 2016 CERN for the benefit of the ACTS project
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 import json
 
 
@@ -141,7 +150,7 @@ def dump_geo(filename, plot, output_folder, dump_steering, steering_file):
                 index_to_extends_layers_discs[vol - 1].append(extends)
             else:
                 print(
-                    f"WARNING: Processing surface with unknown type '{entry["value"]["type"]}'. Only CylinderSurface and DiscSurface are considered."
+                    f"WARNING: Processing surface with unknown type '{entry['value']['type']}'. Only CylinderSurface and DiscSurface are considered."
                 )
 
         if "boundary" in entry:
@@ -176,7 +185,7 @@ def dump_geo(filename, plot, output_folder, dump_steering, steering_file):
                 index_to_extends_layers_bounds_discs[vol - 1].append(extends)
             else:
                 print(
-                    f"WARNING: Processing surface with unknown type '{entry["value"]["type"]}'. Only CylinderSurface and DiscSurface are considered."
+                    f"WARNING: Processing surface with unknown type '{entry['value']['type']}'. Only CylinderSurface and DiscSurface are considered."
                 )
 
     # Steering the information and collect it into an output file if needed
@@ -550,7 +559,7 @@ def read_and_modify(filename, plot, output_folder, steering_file, output_file):
                             ]
                     else:
                         print(
-                            f"WARNING: Processing surface with unknown type '{entry["value"]["type"]}. Only CylinderSurface and DiscSurface are considered."
+                            f"WARNING: Processing surface with unknown type '{entry['value']['type']}. Only CylinderSurface and DiscSurface are considered."
                         )
                     if val["bins"] == 0:
                         print(
@@ -626,7 +635,7 @@ def read_and_modify(filename, plot, output_folder, steering_file, output_file):
                         material_layer_discs[vol - 1].append(extends)
                 else:
                     print(
-                        f"WARNING: Processing surface with unknown type '{entry["value"]["type"]}'. Only CylinderSurface and DiscSurface are considered."
+                        f"WARNING: Processing surface with unknown type '{entry['value']['type']}'. Only CylinderSurface and DiscSurface are considered."
                     )
 
             if "boundary" in entry:

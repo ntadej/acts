@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
+# This file is part of the ACTS project.
+#
+# Copyright (C) 2016 CERN for the benefit of the ACTS project
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import os
 import json
+from pathlib import Path
 
 import acts
 from acts import MaterialMapJsonConverter
@@ -19,13 +26,13 @@ from acts.examples import (
 
 
 def runGeometry(
-    trackingGeometry,
+    trackingGeometry: acts.TrackingGeometry,
     decorators,
-    outputDir,
-    events=1,
-    outputObj=True,
-    outputCsv=True,
-    outputJson=True,
+    outputDir: Path,
+    events: int = 1,
+    outputObj: bool = True,
+    outputCsv: bool = True,
+    outputJson: bool = True,
 ):
     for ievt in range(events):
         eventStore = WhiteBoard(name=f"EventStore#{ievt}", level=acts.logging.INFO)
@@ -39,29 +46,33 @@ def runGeometry(
                 raise RuntimeError("Failed to decorate event context")
 
         if outputCsv:
-            # if not os.path.isdir(outputDir + "/csv"):
-            #    os.makedirs(outputDir + "/csv")
+            csvPath = outputDir / "csv"
+            if not csvPath.is_dir():
+                csvPath.mkdir(parents=True)
             writer = CsvTrackingGeometryWriter(
                 level=acts.logging.INFO,
                 trackingGeometry=trackingGeometry,
-                outputDir=os.path.join(outputDir, "csv"),
+                outputDir=csvPath,
                 writePerEvent=True,
             )
             writer.write(context)
 
         if outputObj:
+            objPath = outputDir / "obj"
             writer = ObjTrackingGeometryWriter(
-                level=acts.logging.INFO, outputDir=os.path.join(outputDir, "obj")
+                level=acts.logging.INFO,
+                outputDir=objPath,
             )
             writer.write(context, trackingGeometry)
 
         if outputJson:
-            # if not os.path.isdir(outputDir + "/json"):
-            #    os.makedirs(outputDir + "/json")
+            jsonPath = outputDir / "json"
+            if not jsonPath.is_dir():
+                jsonPath.mkdir(parents=True)
             writer = JsonSurfacesWriter(
                 level=acts.logging.INFO,
                 trackingGeometry=trackingGeometry,
-                outputDir=os.path.join(outputDir, "json"),
+                outputDir=jsonPath,
                 writePerEvent=True,
                 writeSensitive=True,
             )
@@ -80,7 +91,7 @@ def runGeometry(
             jmw = JsonMaterialWriter(
                 level=acts.logging.VERBOSE,
                 converterCfg=jmConverterCfg,
-                fileName=os.path.join(outputDir, "geometry-map"),
+                fileName=(outputDir / "geometry-map"),
                 writeFormat=JsonFormat.Json,
             )
 
@@ -94,13 +105,13 @@ if "__main__" == __name__:
     trackingGeometry = detector.trackingGeometry()
     decorators = detector.contextDecorators()
 
-    runGeometry(trackingGeometry, decorators, outputDir=os.getcwd())
+    runGeometry(trackingGeometry, decorators, outputDir=Path.cwd())
 
-    # Uncomment if you want to create the geometry id mapping for DD4hep
-    # dd4hepIdGeoIdMap = acts.examples.dd4hep.createDD4hepIdGeoIdMap(trackingGeometry)
-    # dd4hepIdGeoIdValueMap = {}
-    # for key, value in dd4hepIdGeoIdMap.items():
-    #     dd4hepIdGeoIdValueMap[key] = value.value()
+    # Comment if you do not need to create the geometry id mapping for DD4hep
+    dd4hepIdGeoIdMap = acts.examples.dd4hep.createDD4hepIdGeoIdMap(trackingGeometry)
+    dd4hepIdGeoIdValueMap = {}
+    for key, value in dd4hepIdGeoIdMap.items():
+        dd4hepIdGeoIdValueMap[key] = value.value
 
-    # with open('odd-dd4hep-geoid-mapping.json', 'w') as outfile:
-    #    json.dump(dd4hepIdGeoIdValueMap, outfile)
+    with open("odd-dd4hep-geoid-mapping.json", "w") as outfile:
+        json.dump(dd4hepIdGeoIdValueMap, outfile)
