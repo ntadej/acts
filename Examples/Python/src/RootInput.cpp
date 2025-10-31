@@ -70,7 +70,7 @@ void addRootInput(Context& ctx) {
 #endif
 
   ACTS_PYTHON_DECLARE_READER(RootSimHitReader, mex, "RootSimHitReader",
-                             treeName, filePath, outputSimHits);
+                             treeName, filePath, outputSimHits, ignoreBarcode);
 
   {
     auto rmd =

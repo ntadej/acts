@@ -147,9 +147,12 @@ ProcessCode RootSimHitReader::read(const AlgorithmContext& context) {
       break;
     }
 
+    std::vector<std::uint32_t> defaultBarcode = {1, 0, 1, 0, 0};
     const Acts::GeometryIdentifier geoid{m_uint64Columns.at("geometry_id")};
     const SimBarcode pid =
-        SimBarcode().withData(*m_vecUint32Columns.at("barcode"));
+        config().ignoreBarcode
+            ? SimBarcode().withData(defaultBarcode)
+            : SimBarcode().withData(*m_vecUint32Columns.at("barcode"));
     const auto index = m_int32Columns.at("index");
 
     const Acts::Vector4 pos4 = {

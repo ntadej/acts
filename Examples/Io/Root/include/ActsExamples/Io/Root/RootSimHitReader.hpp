@@ -39,6 +39,8 @@ class RootSimHitReader : public IReader {
     std::string treeName = "hits";
     ///< The name of the input file
     std::string filePath;
+    /// ignore barcode
+    bool ignoreBarcode = false;
   };
 
   RootSimHitReader(const RootSimHitReader &) = delete;
